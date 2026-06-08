@@ -1,0 +1,74 @@
+
+*tomocat values (e.g., AIC) are defined in: Simon et al. (2020), https://doi.org/10.1093/gji/ggab271 (see Section S4)
+ -they are derived from preliminary (usually PDE via IRIS) origin locations
+*cfneic values (e.g., d01) are defined in: Nolet et al. (2024), 
+ -they are derived from "finalized" origins published in ISC or NEIC catalogs
+
+
+tomocat column              cfneic column             note
+-------------------------   ------------------------   ------------------------------------------------------------
+FILENAME                    —                         SAC filename from ```automaid```
+EVENT_TIME                  year jd hr mi s ms        Event origin time [UTC]
+EVLO                        evlo                      Event longitude [decimal degrees]
+EVLA                        evla                      Event latitude [decimal degrees]
+MAG_VAL                     Mw                        Event magnitude value; cfneic stores Mw if available, otherwise mb, otherwise Ms
+MAG_TYPE                    —                         Magnitude type
+EVDP                        evdp                      Event depth: tomocat [m], cfneic [km]
+SEISMOGRAM_TIME             —                         UTC timestamp of first seismogram sample (SAC reference time + B offset)
+STLO                        stlo                      Station longitude [decimal degrees]
+STLA                        stla                      Station latitude [decimal degrees]
+STDP                        stel                      Same physical quantity, opposite sign convention: stel = -STDP [m]
+OCDP                        ocdp                      Ocean depth at station location at time of recording [m]
+1D_GCARC                    gcarc                     Epicentral distance / great-circle distance [decimal degrees]
+1D*_GCARC_adj               —                         tomocat unique
+1D*_GCARC                   —                         tomocat unique
+3D_GCARC_adj                —                         tomocat unique
+3D_GCARC                    —                         tomocat unique; NOT cfneic gcarc
+OBS_TRAVTIME                tobs                      Observed travel time from AIC pick as defined in Simon et al., 2021; cfneic adjusts tobs when origin time changes so that observed arrival UTC remains fixed
+OBS_ARVLTIME                —                         Observed arrival time relative to seismogram start; no direct cfneic equivalent
+1D_TRAVTIME                 —                         tomocat unique
+1D_ARVLTIME                 —                         tomocat unique
+1D_TRES                     —                         tomocat unique
+1D*_TIME_adj                —                         tomocat unique
+1D*_TRAVTIME                —                         tomocat unique
+1D*_ARVLTIME                —                         tomocat unique
+1D*_TRES                    —                         tomocat unique
+3D_TIME_adj                 —                         tomocat unique
+3D_TRAVTIME                 —                         tomocat unique
+3D_ARVLTIME                 —                         tomocat unique
+3D_TRES                     —                         tomocat unique
+2STD_ERR                    stder                     AIC-pick uncertainty estimate
+SNR                         snr                       Signal-to-noise ratio
+MAX_COUNTS                  —                         peak amplitude [counts]
+MAX_TIME                    —                         delay between AIC pick and peak amplitude [s]
+NEIC_ID                     —                         NEIC PDE event identifier
+IRIS_ID                     —                         IRIS event identifier
+KSTNM                       kstnm                     Station code
+PHASE                       —                         Phase label (e.g., P, p); no cfneic equivalent
+REVIEWER                    —                         Reviewer identifier if available
+—                           d01                       Length of previous float trajectory leg, as defined in Nolet et al., 2024 [km?]
+—                           d23                       Length of last float trajectory leg, as defined Nolet et al., 2024 [km?]
+—                           angle                     Angle between the two trajectory legs (Figure 3 in Nolet et al., 2024) [degrees]
+—                           tasc                      Time between trigger and surfacing [hr?]
+—                           p                         Slowness of P wave (negative if upgoing) [s/km]; NOT tomocat PHASE
+—                           v1                        Average velocity over previous leg, as defined in Nolet et al., 2024 [km/hr?]
+—                           v2                        Average velocity over current leg, as defined in Nolet et al., 2024 [km/hr?]
+—                           acc                       Average acceleration over the two legs, as defined in Nolet et al., 2024 [km/hr/hr?]
+—                           b                         Location error along the path due to nonzero acceleration, as defined in Nolet et al., 2024 [km?]
+—                           h                         Location error due to deviation from a straight-line path, as defined in Nolet et al., 2024 [km?]
+—                           locnerr                   Equivalent travel-time error (sum of dth and dtb in the paper; Eqs. 16–17) [s]
+
+
+Matching note
+-------------
+
+OBS_TRAVTIME <--> tobs is not a direct value copy.
+
+cfneic preserves the observed arrival UTC by modifying travel time when the
+event origin changes:
+
+    arrival_time = event_time + tobs
+
+Therefore:
+
+    new_tobs = old_event_time + old_tobs - new_event_time
