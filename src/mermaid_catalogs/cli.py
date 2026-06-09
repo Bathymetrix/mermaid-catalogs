@@ -1,4 +1,4 @@
-"""Command-line entry points for mermaid-records."""
+"""Command-line entry points for mermaid-catalogs."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 from typing import Sequence
 
+from . import __version__
 from .catalog import build_catalog_from_paths
 from .verify import verify_sources, write_diagnostics
 
@@ -123,7 +124,8 @@ def _run_catalog_verify(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="mermaid-records")
+    parser = argparse.ArgumentParser(prog="mermaid-catalogs")
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
     _add_catalog_build_parser(subparsers)
     return parser

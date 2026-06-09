@@ -1,6 +1,6 @@
 # Output Catalog
 
-This document defines the first-pass merged MERMAID event catalog produced by mermaid-records.
+This document defines the first-pass merged MERMAID event catalog produced by mermaid-catalogs.
 
 The catalog combines selected values from the legacy tomocat catalog, the cfneic catalog, associated cfneic origin sidecars, and waveform metadata read with ObsPy.
 

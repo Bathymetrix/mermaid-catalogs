@@ -5,14 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from mermaid_records.catalog import (
+from mermaid_catalogs.catalog import (
     assemble_catalog,
     assemble_catalog_with_provenance,
     build_catalog_row,
     write_catalog,
     write_provenance,
 )
-from mermaid_records.models import (
+from mermaid_catalogs.models import (
     CATALOG_COLUMNS,
     DIAGNOSTIC_COLUMNS,
     PROVENANCE_COLUMNS,
@@ -21,9 +21,9 @@ from mermaid_records.models import (
     stdp_from_stel,
     updated_tres,
 )
-from mermaid_records.parsers import parse_cfneic_line, read_cfneic, read_origins, read_tomocat
-from mermaid_records.verify import verify_sources, write_diagnostics
-from mermaid_records.waveforms import ObsPyWaveformCache, WaveformIndex, iter_waveform_pairs
+from mermaid_catalogs.parsers import parse_cfneic_line, read_cfneic, read_origins, read_tomocat
+from mermaid_catalogs.verify import verify_sources, write_diagnostics
+from mermaid_catalogs.waveforms import ObsPyWaveformCache, WaveformIndex, iter_waveform_pairs
 
 FIXTURES = Path(__file__).parent / "fixtures" / "catalog"
 
