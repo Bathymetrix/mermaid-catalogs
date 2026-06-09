@@ -25,6 +25,19 @@ from .parsers import read_cfneic, read_origins, read_tomocat
 from .waveforms import ObsPyWaveformCache, WaveformIndex
 
 
+_CFNEIC_OUTPUT_RENAMES: dict[str, str] = {
+    "slow": "p",
+    "surftime": "tasc",
+    "tobserr": "stder",
+    "dtheta": "angle",
+    "locerr": "locnerr",
+}
+
+_CFNEIC_SIGN_FLIP_RENAMES: dict[str, str] = {
+    "stdp": "stel",
+}
+
+
 @dataclass(frozen=True)
 class CatalogBuildError(RuntimeError):
     """Raised when source rows cannot be matched into catalog rows."""
@@ -38,6 +51,14 @@ class CatalogBuildError(RuntimeError):
 def build_catalog_row(tomocat: TomocatRow, cfneic: CfneicRow, origin: OriginRow, sncl: str = "") -> CatalogRow:
     """Build one merged row while preserving source-catalog values where specified."""
 
+    renamed_cfneic = {
+        output: getattr(cfneic, source)
+        for output, source in _CFNEIC_OUTPUT_RENAMES.items()
+    }
+    sign_flipped_cfneic = {
+        output: decimal_text(stdp_from_stel(getattr(cfneic, source)))
+        for output, source in _CFNEIC_SIGN_FLIP_RENAMES.items()
+    }
     values = {
         "sttime": tomocat.seismogram_time,
         "sncl": sncl,
@@ -48,27 +69,23 @@ def build_catalog_row(tomocat: TomocatRow, cfneic: CfneicRow, origin: OriginRow,
         "evmag": cfneic.mw,
         "stlo": tomocat.stlo,
         "stla": tomocat.stla,
-        "stdp": decimal_text(stdp_from_stel(cfneic.stel)),
         "ocdp": cfneic.ocdp,
         "phase": tomocat.phase,
         "gcarc": cfneic.gcarc,
-        "slow": cfneic.p,
         "tobs": cfneic.tobs,
         "tres": str(updated_tres(cfneic.tobs, tomocat.travtime_1d)),
-        "surftime": cfneic.tasc,
         "snr": cfneic.snr,
-        "tobserr": cfneic.stder,
         "d01": cfneic.d01,
         "d23": cfneic.d23,
-        "dtheta": cfneic.angle,
         "v1": cfneic.v1,
         "v2": cfneic.v2,
         "acc": cfneic.acc,
         "b": cfneic.b,
         "h": cfneic.h,
-        "locerr": cfneic.locnerr,
         "evcat": origin.catalog,
         "evid": origin.event_id,
+        **renamed_cfneic,
+        **sign_flipped_cfneic,
     }
     return CatalogRow(values)
 

@@ -1,3 +1,35 @@
+# Canonical mermaid-catalogs output columns
+#
+# sttime   UTC timestamp; seismogram start time
+# sncl     station.network.location.channel, from mSEED when available
+# evtime   UTC timestamp; finalized event origin time
+# evlo     event longitude [deg]
+# evla     event latitude [deg]
+# evdp     event depth [km]
+# evmag    magnitude value; cfneic Mw else mb else Ms
+# stlo     station longitude [deg]
+# stla     station latitude [deg]
+# stdp     station depth, positive downward [m]
+# ocdp     ocean depth [m]
+# phase    picked phase label
+# gcarc    great-circle distance [deg]
+# slow     signed horizontal slowness [s/km]
+# tobs     observed travel time relative to finalized origin [s]
+# tres     travel-time residual [s]
+# surftime trigger-to-surfacing time [hr]
+# snr      signal-to-noise ratio [dimensionless]
+# tobserr  1-sigma travel-time uncertainty; halved tomocat timing error [s]
+# d01      trajectory-leg length [km]
+# d23      trajectory-leg length [km]
+# dtheta   angle between trajectory legs [deg]
+# v1       average velocity over previous leg [km/day]
+# v2       average velocity over current leg [km/day]
+# acc      average acceleration [km/day^2]
+# b        path location-error term [km]
+# h        straight-line-deviation location-error term [km]
+# locerr   equivalent travel-time error [s]
+# evcat    ISC or NEIC
+# evid     catalog event id
 sttime
 sncl
 

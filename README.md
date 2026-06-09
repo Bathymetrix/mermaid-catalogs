@@ -97,3 +97,14 @@ belong under `sandbox/`.
 The stable contract is the CLI and documented file formats. Internal Python
 module paths are not yet a stable public API and may move as MERMAID packages
 are consolidated.
+
+
+## Column Units Quick Reference
+
+The catalog column definitions are maintained in `docs/catalog.md`. In short:
+
+- Times: `sttime` and `evtime` are UTC timestamps; `tobs`, `tres`, `tobserr`, and `locerr` are seconds; `surftime` is hours.
+- Angles/positions: `evlo`, `evla`, `stlo`, `stla`, `gcarc`, and `dtheta` are degrees.
+- Depths/distances: `evdp` is kilometers; `stdp`, `ocdp`, and cfneic `stel` are meters; `d01`, `d23`, and `h` are kilometers.
+- Slowness: `slow` is cfneic `p` in seconds per kilometer, negative for upgoing phases.
+- Drift quantities use dimensionally consistent units: `v1` and `v2` are `km/day`, `acc` is `km/day^2`, and `b` is `km`.

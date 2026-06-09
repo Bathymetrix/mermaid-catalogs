@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 
+import mermaid_catalogs
 import pytest
 
 from mermaid_catalogs.catalog import (
+    _CFNEIC_OUTPUT_RENAMES,
+    _CFNEIC_SIGN_FLIP_RENAMES,
     assemble_catalog,
     assemble_catalog_with_provenance,
     build_catalog_row,
@@ -26,12 +30,46 @@ from mermaid_catalogs.verify import verify_sources, write_diagnostics
 from mermaid_catalogs.waveforms import ObsPyWaveformCache, WaveformIndex, iter_waveform_pairs
 
 FIXTURES = Path(__file__).parent / "fixtures" / "catalog"
+REPO_ROOT = Path(__file__).parents[1]
 
 
 def test_cfneic_timestamp_construction() -> None:
-    assert cfneic_timestamp("2018", "187", "01", "40", "05", "789").isoformat() == (
-        "2018-07-06T01:40:05.789000+00:00"
+    assert mermaid_catalogs.__version__
+    assert cfneic_timestamp("2018", "187", "01", "40", "05", "789") == datetime(
+        2018, 7, 6, 1, 40, 5, 789000, tzinfo=timezone.utc
     )
+
+
+def test_cfneic_output_rename_map() -> None:
+    assert _CFNEIC_OUTPUT_RENAMES == {
+        "slow": "p",
+        "surftime": "tasc",
+        "tobserr": "stder",
+        "dtheta": "angle",
+        "locerr": "locnerr",
+    }
+    assert _CFNEIC_SIGN_FLIP_RENAMES == {
+        "stdp": "stel",
+    }
+
+
+def test_documented_column_list_and_renames_match_source() -> None:
+    header_lines = (
+        (REPO_ROOT / "templates" / "headers.txt")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    )
+    documented_columns = tuple(
+        line.strip() for line in header_lines if line.strip() and not line.startswith("#")
+    )
+    catalog_doc = (REPO_ROOT / "docs" / "catalog.md").read_text(encoding="utf-8")
+
+    assert documented_columns == CATALOG_COLUMNS
+    assert f"`{' '.join(CATALOG_COLUMNS)}`" in catalog_doc
+    for output, source in _CFNEIC_OUTPUT_RENAMES.items():
+        assert f"`{output} <- {source}`" in catalog_doc
+    for output, source in _CFNEIC_SIGN_FLIP_RENAMES.items():
+        assert f"`{output} <- -{source}`" in catalog_doc
 
 
 def test_stdp_from_stel() -> None:

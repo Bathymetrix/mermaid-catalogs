@@ -37,7 +37,7 @@ OBS_ARVLTIME                —                         Observed arrival time re
 3D_TRAVTIME                 —                         tomocat unique
 3D_ARVLTIME                 —                         tomocat unique
 3D_TRES                     —                         tomocat unique
-2STD_ERR                    stder                     AIC-pick uncertainty estimate
+2STD_ERR                    stder                     AIC-pick uncertainty [s]; cfneic halves the tomocat timing error to a 1-sigma value
 SNR                         snr                       Signal-to-noise ratio
 MAX_COUNTS                  —                         peak amplitude [counts]
 MAX_TIME                    —                         delay between AIC pick and peak amplitude [s]
@@ -46,18 +46,17 @@ IRIS_ID                     —                         IRIS event identifier
 KSTNM                       kstnm                     Station code
 PHASE                       —                         Phase label (e.g., P, p); no cfneic equivalent
 REVIEWER                    —                         Reviewer identifier if available
-—                           d01                       Length of previous float trajectory leg, as defined in Nolet et al., 2024 [km?]
-—                           d23                       Length of last float trajectory leg, as defined Nolet et al., 2024 [km?]
+—                           d01                       Length of previous float trajectory leg, as defined in Nolet et al., 2024 [km]
+—                           d23                       Length of last float trajectory leg, as defined Nolet et al., 2024 [km]
 —                           angle                     Angle between the two trajectory legs (Figure 3 in Nolet et al., 2024) [degrees]
-—                           tasc                      Time between trigger and surfacing [hr?]
+—                           tasc                      Time between trigger and surfacing [hr]
 —                           p                         Slowness of P wave (negative if upgoing) [s/km]; NOT tomocat PHASE
-—                           v1                        Average velocity over previous leg, as defined in Nolet et al., 2024 [km/hr?]
-—                           v2                        Average velocity over current leg, as defined in Nolet et al., 2024 [km/hr?]
-—                           acc                       Average acceleration over the two legs, as defined in Nolet et al., 2024 [km/hr/hr?]
-—                           b                         Location error along the path due to nonzero acceleration, as defined in Nolet et al., 2024 [km?]
-—                           h                         Location error due to deviation from a straight-line path, as defined in Nolet et al., 2024 [km?]
+—                           v1                        Average velocity over previous leg, as defined in Nolet et al., 2024 [km/day]
+—                           v2                        Average velocity over current leg, as defined in Nolet et al., 2024 [km/day]
+—                           acc                       Average acceleration over the two legs, as defined in Nolet et al., 2024 [km/day^2]
+—                           b                         Location error along the path due to nonzero acceleration, as defined in Nolet et al., 2024 [km]
+—                           h                         Location error due to deviation from a straight-line path, as defined in Nolet et al., 2024 [km]
 —                           locnerr                   Equivalent travel-time error (sum of dth and dtb in the paper; Eqs. 16–17) [s]
-
 
 Matching note
 -------------

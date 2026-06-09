@@ -40,11 +40,11 @@ Catalog provenance comes from sidecar files associated with the out.cfneic produ
 
 Expected conceptual columns:
 
-text catalog    event_id 
+`catalog    event_id`
 
 where catalog is one of:
 
-text ISC NEIC 
+`ISC`, `NEIC`
 
 ### Waveforms
 
@@ -59,7 +59,7 @@ Primary catalog writing should proceed line by line. For each row, the relevant 
 
 The output catalog columns are:
 
-text sttime sncl  evtime evlo evla evdp evmag  stlo stla stdp ocdp  phase gcarc slow tobs tres surftime snr tobserr  d01 d23 dtheta v1 v2 acc b h locerr  evcat evid 
+`sttime sncl evtime evlo evla evdp evmag stlo stla stdp ocdp phase gcarc slow tobs tres surftime snr tobserr d01 d23 dtheta v1 v2 acc b h locerr evcat evid`
 
 A filename or waveform path may be written separately as an internal sidecar rather than leading the scientific catalog.
 
@@ -156,7 +156,7 @@ Station depth.
 - Sign convention: positive downward
 - Output policy:
 
-text stdp = -stel 
+`stdp = -stel`
 
 - Verification: read corresponding SAC file with ObsPy and confirm SAC.stats.sac.stdp == -cfneic.stel within threshold TBD
 - Note: tomocat STDP should also agree
@@ -214,7 +214,7 @@ Observed travel time relative to the updated/final event origin.
 
 Definition:
 
-text AIC_time_UTC = evtime + tobs 
+`AIC_time_UTC = evtime + tobs`
 
 Important: cfneic tobs is not a direct copy of tomocat OBS_TRAVTIME.
 
@@ -222,15 +222,17 @@ cfneic preserves the observed AIC arrival time in UTC while updating the origin 
 
 Given:
 
-text old_AIC_time = tomocat EVENT_TIME + tomocat OBS_TRAVTIME new_AIC_time = cfneic evtime + cfneic tobs 
+`old_AIC_time = tomocat EVENT_TIME + tomocat OBS_TRAVTIME`
+
+`new_AIC_time = cfneic evtime + cfneic tobs`
 
 then:
 
-text old_AIC_time == new_AIC_time 
+`old_AIC_time == new_AIC_time`
 
 and therefore:
 
-text new_tobs = old_event_time + old_tobs - new_event_time 
+`new_tobs = old_event_time + old_tobs - new_event_time`
 
 Verification: confirm the old and new AIC arrival UTC values match within threshold TBD.
 
@@ -244,23 +246,29 @@ Travel-time residual.
 
 Definition:
 
-text tres = tobs - 1D_TRAVTIME 
+`tres = tobs - 1D_TRAVTIME`
 
 where:
 
-text tobs = cfneic tobs 1D_TRAVTIME = tomocat 1D_TRAVTIME 
+`tobs = cfneic tobs`
+
+`1D_TRAVTIME = tomocat 1D_TRAVTIME`
 
 Equivalently:
 
-text new_tres = old_tres + (new_tobs - old_tobs) 
+`new_tres = old_tres + (new_tobs - old_tobs)`
 
 where:
 
-text old_tres = tomocat 1D_TRES old_tobs = tomocat OBS_TRAVTIME new_tobs = cfneic tobs 
+`old_tres = tomocat 1D_TRES`
+
+`old_tobs = tomocat OBS_TRAVTIME`
+
+`new_tobs = cfneic tobs`
 
 Verification: independently compute a TauP/ak135 predicted travel time using finalized geometry and phase:
 
-text tres_verify = tobs - tpred 
+`tres_verify = tobs - tpred`
 
 Compare catalog tres against tres_verify within threshold TBD.
 
@@ -272,9 +280,8 @@ Time between recording and surfacing.
 
 - Source: cfneic tasc
 - Output policy: copy verbatim from cfneic
-- Units: presumed hours
-- CHECK: confirm exact units and physical definition
-- Future note: likely time between trigger/record time and first GPS fix after surfacing, but this must be verified from cfneic source code, Nolet et al. (2024), or original processing notes
+- Units: hr
+- Definition: time between trigger and surfacing, following cfneic `tasc`
 - Note: output column intentionally renames cfneic tasc to surftime
 
 ### snr
@@ -294,7 +301,7 @@ Observed travel-time uncertainty estimate.
 - Source: cfneic stder
 - Units: s
 - Output policy: copy verbatim from cfneic
-- Provenance: originally derived from tomocat 2STD_ERR
+- Provenance: cfneic documents this as the tomocat timing error halved to a 1-sigma value
 - Note: output column intentionally renames cfneic stder to tobserr
 
 ### d01
@@ -302,7 +309,7 @@ Observed travel-time uncertainty estimate.
 Length of previous float trajectory leg.
 
 - Source: cfneic d01
-- Units: CHECK, likely km
+- Units: km
 - Output policy: copy verbatim from cfneic
 - Definition: see Nolet et al. (2024)
 
@@ -311,7 +318,7 @@ Length of previous float trajectory leg.
 Length of last/current float trajectory leg.
 
 - Source: cfneic d23
-- Units: CHECK, likely km
+- Units: km
 - Output policy: copy verbatim from cfneic
 - Definition: see Nolet et al. (2024)
 
@@ -330,7 +337,7 @@ Angle between the two trajectory legs.
 Average velocity over previous trajectory leg.
 
 - Source: cfneic v1
-- Units: CHECK, likely km/hr
+- Units: km/day
 - Output policy: copy verbatim from cfneic
 - Definition: see Nolet et al. (2024)
 
@@ -339,7 +346,7 @@ Average velocity over previous trajectory leg.
 Average velocity over current trajectory leg.
 
 - Source: cfneic v2
-- Units: CHECK, likely km/hr
+- Units: km/day
 - Output policy: copy verbatim from cfneic
 - Definition: see Nolet et al. (2024)
 
@@ -348,7 +355,7 @@ Average velocity over current trajectory leg.
 Average acceleration over the two trajectory legs.
 
 - Source: cfneic acc
-- Units: CHECK, likely km/hr/hr
+- Units: km/day^2
 - Output policy: copy verbatim from cfneic
 - Definition: see Nolet et al. (2024)
 
@@ -357,7 +364,7 @@ Average acceleration over the two trajectory legs.
 Location error along the path due to nonzero acceleration.
 
 - Source: cfneic b
-- Units: CHECK, likely km
+- Units: km
 - Output policy: copy verbatim from cfneic
 - Definition: see Nolet et al. (2024)
 
@@ -366,7 +373,7 @@ Location error along the path due to nonzero acceleration.
 Location error due to deviation from a straight-line path.
 
 - Source: cfneic h
-- Units: CHECK, likely km
+- Units: km
 - Output policy: copy verbatim from cfneic
 - Definition: see Nolet et al. (2024)
 
@@ -404,27 +411,27 @@ Event identifier within the authoritative event catalog.
 
 ### Direct copies from cfneic
 
-text evlo evla evdp evmag ocdp gcarc slow surftime snr tobserr d01 d23 dtheta v1 v2 acc b h locerr 
+`evlo evla evdp evmag ocdp gcarc slow surftime snr tobserr d01 d23 dtheta v1 v2 acc b h locerr`
 
 with these renames:
 
-text slow    <- p surftime <- tasc tobserr <- stder dtheta  <- angle locerr  <- locnerr stdp    <- -stel 
+`slow <- p`; `surftime <- tasc`; `tobserr <- stder`; `dtheta <- angle`; `locerr <- locnerr`; `stdp <- -stel`
 
 ### Direct copies from tomocat
 
-text sttime stlo stla phase 
+`sttime stlo stla phase`
 
 ### Direct reads from waveform metadata
 
-text sncl 
+`sncl`
 
 ### Derived/updated fields
 
-text evtime tobs tres stdp 
+`evtime tobs tres stdp`
 
 ### Provenance fields
 
-text evcat evid 
+`evcat evid`
 
 ## Verification / Diagnostics Philosophy
 
@@ -432,18 +439,17 @@ Primary catalog generation should not fail merely because a verification check f
 
 Possible diagnostic checks include:
 
-text sttime_mseed_check stlo_sac_check stla_sac_check stdp_sac_check gcarc_obspy_check slow_taup_check phase_taup_check tobs_arrival_utc_check tres_taup_check ocdp_gebco_check evmeta_fdsn_check 
+`sttime_mseed_check stlo_sac_check stla_sac_check stdp_sac_check gcarc_obspy_check slow_taup_check phase_taup_check tobs_arrival_utc_check tres_taup_check ocdp_gebco_check evmeta_fdsn_check`
 
 The diagnostics sidecar should include at least:
 
-text row_index field check_name source_value computed_value difference threshold status message 
+`row_index field check_name source_value computed_value difference threshold status message`
 
 Thresholds are TBD.
 
 ## Deferred Questions
 
-- Confirm exact definition and units of surftime / cfneic tasc.
-- Confirm units for d01, d23, v1, v2, acc, b, and h.
+- Confirm whether `d01`/`d23` labels should be described as previous/current legs or last/previous legs consistently with cfneic and Nolet et al. (2024).
 - Confirm whether sncl should be serialized as Station.Network.Location.Channel or another project-specific ordering.
 - Decide whether magnitude type should be preserved in a future column.
 - Decide whether filenames belong in a sidecar, an internal mapping file, or an optional final column.
