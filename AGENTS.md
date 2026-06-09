@@ -14,6 +14,16 @@ Guidance for coding agents working in this repository.
 
 AGENTS should keep future namespace consolidation in mind during all implementation and API decisions.
 
+## README Maintenance
+
+- Keep `README.md` aligned with the current CLI name, installation pattern,
+  primary commands, output sidecars, and verification behavior.
+- When changing CLI flags, package extras, output locations, or public file
+  formats, update `README.md` in the same work unit unless there is a clear
+  reason not to.
+- Keep `README.md` concise and workflow-oriented. Put detailed scientific field
+  definitions and catalog semantics in `docs/catalog.md`.
+
 ## Instrument Terminology
 
 - Refer to full names such as `467.174-T-0100` as the **instrument serial**.
