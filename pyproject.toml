@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mermaid-records"
+version = "0.1.0"
+description = "Scaffold tools for building provenance-preserving MERMAID output catalogs."
+readme = "docs/catalog.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "MERMAID contributors" }]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+verify = ["obspy>=1.5,<2"]
+
+[project.scripts]
+mermaid-records = "mermaid_records.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q -p no:cacheprovider"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
