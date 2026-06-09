@@ -18,6 +18,8 @@ AGENTS should keep future namespace consolidation in mind during all implementat
 
 - Keep `README.md` aligned with the current CLI name, installation pattern,
   primary commands, output sidecars, and verification behavior.
+- Use `$MERMAID` in documentation and examples for paths below the local
+  MERMAID data root. Do not expose user-specific absolute data paths.
 - When changing CLI flags, package extras, output locations, or public file
   formats, update `README.md` in the same work unit unless there is a clear
   reason not to.

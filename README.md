@@ -12,8 +12,8 @@ fields, and writes independent verification results to diagnostics sidecars.
 Use a repo-local virtual environment, matching the other `mermaid-*` packages:
 
 ```bash
-cd /Users/jdsimon/programs/mermaid-catalogs
-/opt/homebrew/bin/python3.14 -m venv .venv
+cd path/to/mermaid-catalogs
+python3.14 -m venv .venv
 .venv/bin/python -m pip install -e '.[dev]'
 ```
 
@@ -32,23 +32,25 @@ most explicit and reproducible pattern.
 Real cfneic/tomocat products currently live under:
 
 ```text
-/Users/jdsimon/mermaid/cfneic/outputs
+$MERMAID/cfneic/outputs
 ```
 
 Waveforms, when available, live recursively under:
 
 ```text
-/Users/jdsimon/mermaid/processed_everyone
+$MERMAID/processed_everyone
 ```
 
 Build a catalog and optional provenance sidecar:
 
 ```bash
+export MERMAID=/path/to/mermaid
+
 .venv/bin/mermaid-catalogs catalog build \
-  --input-root /Users/jdsimon/mermaid/cfneic/outputs \
+  --input-root "$MERMAID/cfneic/outputs" \
   --output sandbox/catalog.tsv \
   --provenance-output sandbox/catalog.provenance.tsv \
-  --waveform-root /Users/jdsimon/mermaid/processed_everyone
+  --waveform-root "$MERMAID/processed_everyone"
 ```
 
 The main output columns are fixed by `docs/catalog.md`. The `sncl` column is
@@ -60,10 +62,12 @@ Verification writes diagnostics only. It does not mutate or silently replace
 main catalog values.
 
 ```bash
+export MERMAID=/path/to/mermaid
+
 .venv/bin/mermaid-catalogs catalog verify \
-  --input-root /Users/jdsimon/mermaid/cfneic/outputs \
+  --input-root "$MERMAID/cfneic/outputs" \
   --diagnostics sandbox/catalog.diagnostics.tsv \
-  --waveform-root /Users/jdsimon/mermaid/processed_everyone
+  --waveform-root "$MERMAID/processed_everyone"
 ```
 
 Implemented diagnostics include:
@@ -93,4 +97,3 @@ belong under `sandbox/`.
 The stable contract is the CLI and documented file formats. Internal Python
 module paths are not yet a stable public API and may move as MERMAID packages
 are consolidated.
-
