@@ -1,6 +1,6 @@
 """MERMAID merged catalog tools."""
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 __author__ = "MERMAID contributors"
 __license__ = "MIT"
 
